@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ImageMagick;
 using Newtonsoft.Json;
 using SharedClasses;
+using ShellProgressBar;
 
 namespace PrepareInput
 {
@@ -17,6 +18,11 @@ namespace PrepareInput
         private TmpDir _outputDir;
         private readonly int _limit;
 
+        public static void CreateInputArchive(DirectoryInfo dir, string archiveName, int size = 20, int limit = 5000)
+        {
+            var prepareInput = new PrepareInput(dir, size, limit);
+            prepareInput.CreateInputArchive(archiveName);
+        }
 
         public PrepareInput(DirectoryInfo dir, int size = 20, int limit = 5000)
         {
@@ -42,35 +48,29 @@ namespace PrepareInput
             }
         }
 
-        public static void CreateInputArchive(DirectoryInfo dir, string archiveName, int size = 20, int limit = 5000)
-        {
-            var prepareInput = new PrepareInput(dir, size, limit);
-            prepareInput.CreateInputArchive(archiveName);
-        }
-
         private void CreateImageInfosAndResize()
         {
             //Get file array 
             var files = ImageFinder.GetImages(_inputDir, _limit).ToArray();
 
-            var counter = 0;
             var total = files.Length;
 
-            Parallel.ForEach(files, (file, state) =>
+            using (var bar = new ProgressBar(total, "Preparing Image"))
             {
-                Interlocked.Increment(ref counter);
-
-                Console.WriteLine($"Preparing image : {file.Name} - {counter}/{total}");
-
-                ResizeImage(file);
-
-                var imageInfo = new ImageInfo {FileName = file.Name, AverageColor = GetAverageColor(file)};
-
-                lock (_infoFile)
+                Parallel.ForEach(files, (file, state) =>
                 {
-                    _infoFile.ImageInfos.Add(imageInfo);
-                }
-            });
+                    ResizeImage(file);
+
+                    var imageInfo = new ImageInfo {FileName = file.Name, AverageColor = GetAverageColor(file)};
+
+                    lock (_infoFile)
+                    {
+                        _infoFile.ImageInfos.Add(imageInfo);
+                    }
+
+                    bar.Tick(file.Name);
+                });
+            }
         }
 
         private void ResizeImage(FileInfo fileInfo)

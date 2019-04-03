@@ -27,21 +27,6 @@ namespace MosaicGenerator
 
         public string MostFittingImageFilename(MagickColor color)
         {
-            /*var mostFittingNode = _imageInfos.First;
-            var mostFittingValue = ColorEuclideanDistance(mostFittingNode.Value.AverageColor, color);
-
-            //Find the most fitting image
-            for (var node = mostFittingNode.Next; node != null; node = node.Next)
-            {
-                var imageInfo = node.Value;
-                var val = ColorEuclideanDistance(imageInfo.AverageColor, color);
-
-                if (!(val < mostFittingValue)) continue;
-
-                mostFittingNode = node;
-                mostFittingValue = val;
-            }*/
-
             var image = _imageInfos.Where(i => i.Available).MinBy(i => ColorEuclideanDistance(i.AverageColor, color))
                 .First();
 
