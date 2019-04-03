@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedClasses", "SharedClasses\SharedClasses.csproj", "{ADDA5809-1458-49E5-9D0A-8AF39BF19199}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrepareInput", "PrepareInput\PrepareInput.csproj", "{C78DD943-2D7E-4EEC-B19D-02A73641D116}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MosaicGenerator", "MosaicGenerator\MosaicGenerator.csproj", "{9506BA0F-6060-4A0B-A54E-96F2B23931DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ADDA5809-1458-49E5-9D0A-8AF39BF19199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADDA5809-1458-49E5-9D0A-8AF39BF19199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADDA5809-1458-49E5-9D0A-8AF39BF19199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADDA5809-1458-49E5-9D0A-8AF39BF19199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C78DD943-2D7E-4EEC-B19D-02A73641D116}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C78DD943-2D7E-4EEC-B19D-02A73641D116}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C78DD943-2D7E-4EEC-B19D-02A73641D116}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C78DD943-2D7E-4EEC-B19D-02A73641D116}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9506BA0F-6060-4A0B-A54E-96F2B23931DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9506BA0F-6060-4A0B-A54E-96F2B23931DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9506BA0F-6060-4A0B-A54E-96F2B23931DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9506BA0F-6060-4A0B-A54E-96F2B23931DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
