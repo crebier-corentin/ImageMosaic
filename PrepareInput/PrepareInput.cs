@@ -51,7 +51,7 @@ namespace PrepareInput
         private void CreateImageInfosAndResize()
         {
             //Get file array 
-            var files = ImagePicker.GetImages(_inputDir, _limit).ToArray();
+            var files = ImageFinder.GetImages(_inputDir, _limit).ToArray();
 
             var counter = 0;
             var total = files.Length;

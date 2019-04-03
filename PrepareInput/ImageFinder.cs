@@ -6,7 +6,7 @@ using ImageMagick;
 
 namespace PrepareInput
 {
-    public class ImagePicker
+    public static class ImageFinder
     {
         public class Count
         {
