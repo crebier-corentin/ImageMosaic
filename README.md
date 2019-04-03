@@ -1,6 +1,10 @@
 # ImageMosaic
 Un générateur d'image mosaïque
 
+![Mosaic](berries-mosaic.png)
+###### Irina Edilbaeva "Strawberries Topped Cake in Plate" https://www.pexels.com/photo/strawberries-topped-cake-in-plate-2072476/
+###### "Large-scale CelebFaces Attributes (CelebA) Dataset" http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html
+
 # PrepareInput
 
 `PrepareInput chemin/vers/le/dossier/contenant/les/images`  
