@@ -12,7 +12,7 @@ def zipdir(path, ziph):
     # ziph is zipfile handle
     for root, dirs, files in os.walk(path):
         for file in files:
-            ziph.write(os.path.join(root, file))
+            ziph.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), os.path.join(path, '..')))
 
 def zipFileFromDir(dirPath: str, ouputPath:str):
     zipf = zipfile.ZipFile(ouputPath, 'w', zipfile.ZIP_DEFLATED)
@@ -20,7 +20,7 @@ def zipFileFromDir(dirPath: str, ouputPath:str):
     zipf.close()
 
 @dataclass
-class Info:
+class Project:
     rid: str
     projectName: str
 
@@ -38,17 +38,17 @@ class Info:
         zipFileFromDir(self.outputPath(), os.path.join(rootDirPath, "build/", f"{self.projectName}-{self.rid}.zip"))
 
 
-projects : List[str] = ["PrepareInput", "MosaicGenerator"]
+projectNames : List[str] = ["PrepareInput", "MosaicGenerator"]
 rids : List[str] = ["win-x64", "linux-x64", "osx-x64"]
 
 #List of projects
 
-list : List[Info] = []
+projectList : List[Project] = []
 
-for project in projects:
+for project in projectNames:
     for rid in rids:
-        list.append(Info(rid, project))
+        projectList.append(Project(rid, project))
 
-for i in list:
-    i.build()
-    i.zip()
+for pro in projectList:
+    pro.build()
+    pro.zip()
