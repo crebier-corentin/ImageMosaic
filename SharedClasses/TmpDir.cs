@@ -9,6 +9,8 @@ namespace SharedClasses
     {
         public readonly DirectoryInfo Dir;
 
+        private bool _willBeDeleted = true;
+
         public TmpDir(string name = "tmp")
         {
             //Delete previous if exist
@@ -30,8 +32,26 @@ namespace SharedClasses
             {
                 File.Delete(name);
             }
-            
-            ZipFile.CreateFromDirectory(Dir.FullName, name);
+
+
+            try
+            {
+                ZipFile.CreateFromDirectory(Dir.FullName, name);
+
+                if (!File.Exists(name))
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine(
+                    "Error while creating the archive, please manually create an archive from output_tmp");
+                _willBeDeleted = false;
+                throw;
+            }
         }
 
         public FileStream GetCreateStream(string filename)
@@ -50,7 +70,10 @@ namespace SharedClasses
         public void Dispose()
         {
             //Delete tmp dir
-            DeleteDirectory(Dir.FullName);
+            if (_willBeDeleted)
+            {
+                DeleteDirectory(Dir.FullName);
+            }
 
             Console.WriteLine($"Deleted tmp dir : {Dir.FullName}");
         }

@@ -8,6 +8,8 @@ namespace PrepareInput
 {
     public static class ImageFinder
     {
+        private static int _previousLength = -1;
+
         public class Count
         {
             public int Value;
@@ -31,7 +33,16 @@ namespace PrepareInput
                 //Image
                 if (CanOpenImage(file))
                 {
-                    Console.WriteLine($"Finding image : {file.Name} - {count.Value}/{limit}");
+                    //Erase previous line
+                    if (_previousLength != -1)
+                    {
+                        Console.Write(new string('\b', _previousLength));
+                    }
+
+                    var str = $"Finding image : {file.Name} - {count.Value}/{limit}";
+                    _previousLength = str.Length;
+                    Console.Write(str);
+                    
 
                     count.Value++;
                     yield return file;
