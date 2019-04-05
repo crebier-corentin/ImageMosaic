@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ImageMagick;
+using SharedClasses;
 
 namespace PrepareInput
 {
     public static class ImageFinder
     {
-        private static int _previousLength = -1;
+        private static ProgressBar _bar = null;
 
         public class Count
         {
@@ -22,6 +23,11 @@ namespace PrepareInput
                 count = new Count();
             }
 
+            if (_bar == null)
+            {
+                _bar = new ProgressBar(limit);
+            }
+
             foreach (var file in rootDir.EnumerateFiles())
             {
                 //Limit
@@ -33,18 +39,10 @@ namespace PrepareInput
                 //Image
                 if (CanOpenImage(file))
                 {
-                    //Erase previous line
-                    if (_previousLength != -1)
-                    {
-                        Console.Write(new string('\b', _previousLength));
-                    }
-
-                    var str = $"Finding image : {file.Name} - {count.Value}/{limit}";
-                    _previousLength = str.Length;
-                    Console.Write(str);
-                    
+                    _bar.Tick($"Finding image : {file.Name}");
 
                     count.Value++;
+
                     yield return file;
                 }
             }

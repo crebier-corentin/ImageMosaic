@@ -14,7 +14,6 @@
       <PackageReference Include="Microsoft.Packaging.Tools.Trimming" Version="1.1.0-preview1-26619-01" />
       <PackageReference Include="morelinq" Version="3.1.0" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-      <PackageReference Include="ShellProgressBar" Version="4.2.0" />
     </ItemGroup>
 
     <ItemGroup>

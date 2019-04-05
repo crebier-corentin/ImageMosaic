@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ImageMagick;
 using Newtonsoft.Json;
 using SharedClasses;
-using ShellProgressBar;
+
 
 namespace PrepareInput
 {
@@ -55,22 +55,21 @@ namespace PrepareInput
 
             var total = files.Length;
 
-            using (var bar = new ProgressBar(total, "Preparing Image"))
+            var bar = new ProgressBar(total, "Preparing Image");
+
+            Parallel.ForEach(files, (file, state) =>
             {
-                Parallel.ForEach(files, (file, state) =>
+                ResizeImage(file);
+
+                var imageInfo = new ImageInfo {FileName = file.Name, AverageColor = GetAverageColor(file)};
+
+                lock (_infoFile)
                 {
-                    ResizeImage(file);
+                    _infoFile.ImageInfos.Add(imageInfo);
+                }
 
-                    var imageInfo = new ImageInfo {FileName = file.Name, AverageColor = GetAverageColor(file)};
-
-                    lock (_infoFile)
-                    {
-                        _infoFile.ImageInfos.Add(imageInfo);
-                    }
-
-                    bar.Tick(file.Name);
-                });
-            }
+                bar.Tick($"Preparing Image : {file.Name}");
+            });
         }
 
         private void ResizeImage(FileInfo fileInfo)

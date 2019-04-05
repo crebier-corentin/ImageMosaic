@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ImageMagick;
 using SharedClasses;
-using ShellProgressBar;
+
 
 namespace MosaicGenerator
 {
@@ -36,18 +36,17 @@ namespace MosaicGenerator
                 var picker = new ImagePicker(_archive, allowDuplicates);
 
                 //Bar
-                using (var bar = new ProgressBar(total, "Picking images"))
+                var bar = new ProgressBar(total, "Picking images");
+
+                Parallel.ForEach(pixels, pixel =>
                 {
-                    Parallel.ForEach(pixels, pixel =>
-                    {
-                        var point = new Point(pixel.X, pixel.Y);
+                    var point = new Point(pixel.X, pixel.Y);
 
-                        var filename = picker.MostFittingImageFilename(pixel.ToColor());
-                        _images.TryAdd(point, filename);
+                    var filename = picker.MostFittingImageFilename(pixel.ToColor());
+                    _images.TryAdd(point, filename);
 
-                        bar.Tick($"Picking image for pixel {point}");
-                    });
-                }
+                    bar.Tick($"Picking image for pixel {point}");
+                });
             }
         }
 
@@ -66,20 +65,19 @@ namespace MosaicGenerator
                     var pixelCountTotal = pixelCollection.Count();
 
                     //Bar
-                    using (var bar = new ProgressBar(pixelCountTotal, "Creating mosaic"))
+                    var bar = new ProgressBar(pixelCountTotal, "Creating mosaic");
+
+                    foreach (var pixel in pixelCollection)
                     {
-                        foreach (var pixel in pixelCollection)
+                        var outputX = pixel.X * pixelSize;
+                        var outputY = pixel.Y * pixelSize;
+
+                        using (var image = _archive.GetImage(_images[new Point(pixel.X, pixel.Y)]))
                         {
-                            var outputX = pixel.X * pixelSize;
-                            var outputY = pixel.Y * pixelSize;
-
-                            using (var image = _archive.GetImage(_images[new Point(pixel.X, pixel.Y)]))
-                            {
-                                output.Composite(image, outputX, outputY);
-                            }
-
-                            bar.Tick();
+                            output.Composite(image, outputX, outputY);
                         }
+
+                        bar.Tick();
                     }
                 }
 
