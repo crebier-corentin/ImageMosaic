@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.IO.Compression;
-using ImageMagick;
 
 namespace SharedClasses
 {
@@ -32,7 +31,6 @@ namespace SharedClasses
             {
                 File.Delete(name);
             }
-
 
             try
             {

@@ -1,14 +1,14 @@
-﻿using System;
-using System.IO;
-using CommandLine;
+﻿using CommandLine;
 using ImageMagick;
 using SharedClasses;
+using System;
+using System.IO;
 
 namespace MosaicGenerator
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(options =>
@@ -28,11 +28,11 @@ namespace MosaicGenerator
                     }
                 });
 
-          /*  using (var image = new MagickImage("aurora-borealis.png"))
-            {
-                image.Resize(new Percentage(20));
-                image.Write($"small-aurora-borealis.png");
-            }*/
+            /*  using (var image = new MagickImage("aurora-borealis.png"))
+              {
+                  image.Resize(new Percentage(20));
+                  image.Write($"small-aurora-borealis.png");
+              }*/
         }
     }
 }

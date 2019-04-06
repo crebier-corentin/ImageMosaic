@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using ImageMagick;
+using System.Collections.Generic;
 
 namespace SharedClasses
 {

@@ -1,8 +1,8 @@
+using ImageMagick;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.IO.Compression;
-using ImageMagick;
-using Newtonsoft.Json;
 
 namespace SharedClasses
 {
@@ -18,12 +18,12 @@ namespace SharedClasses
 
         public static InputArchive FromFile(string filename)
         {
-            return new InputArchive {_archive = ZipFile.Open(filename, ZipArchiveMode.Read), _archiveName = filename};
+            return new InputArchive { _archive = ZipFile.Open(filename, ZipArchiveMode.Read), _archiveName = filename };
         }
 
         public static InputArchive Create(string filename)
         {
-            var archive = new InputArchive {_fileStream = File.Create(filename), _archiveName = filename};
+            var archive = new InputArchive { _fileStream = File.Create(filename), _archiveName = filename };
             archive._archive = new ZipArchive(archive._fileStream, ZipArchiveMode.Update);
 
             return archive;
@@ -32,17 +32,17 @@ namespace SharedClasses
         /*  public void AddFile(string name, Stream stream)
           {
               var entry = _archive.CreateEntry(name);
-  
+
               using (var entryStream = entry.Open())
               {
                   stream.CopyTo(entryStream);
               }
           }
-  
+
           public void AddFile(string name, string content)
           {
               var entry = _archive.CreateEntry(name);
-  
+
               using (var entryStream = new StreamWriter(entry.Open()))
               {
                   entryStream.Write(content);

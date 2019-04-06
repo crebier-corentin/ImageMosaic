@@ -3,7 +3,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace SharedClasses
 {
     public class ProgressBar
@@ -25,7 +24,7 @@ namespace SharedClasses
         public string Label => _label;
         public int Current => _current;
         public int Maximum => _maximum;
-        public int Percentage => (int) ((double) _current / _maximum * 100);
+        public int Percentage => (int)((double)_current / _maximum * 100);
 
         public int Fraction => Helpers.Ratio(_current, _maximum, BarLenght);
 
@@ -47,7 +46,6 @@ namespace SharedClasses
             //PrintTimer
             ProgressBarManager.TimerElapsed += ProgressBarManagerOnTimerElapsed;
         }
-
 
         public void Tick()
         {

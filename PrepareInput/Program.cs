@@ -1,14 +1,13 @@
-﻿using System;
-using System.IO;
-using CommandLine;
-using ImageMagick;
+﻿using CommandLine;
 using SharedClasses;
+using System;
+using System.IO;
 
 namespace PrepareInput
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(options =>

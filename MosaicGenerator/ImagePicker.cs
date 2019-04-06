@@ -1,9 +1,9 @@
+using ImageMagick;
+using MoreLinq;
+using SharedClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ImageMagick;
-using SharedClasses;
-using MoreLinq;
 
 namespace MosaicGenerator
 {

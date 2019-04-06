@@ -6,7 +6,7 @@ namespace SharedClasses
     {
         public static int Ratio(int value, int maximum, int unit)
         {
-            return Ratio((double) value, (double) maximum, (double) unit);
+            return Ratio((double)value, (double)maximum, (double)unit);
         }
 
         public static int Ratio(double value, double maximum, double unit)
@@ -16,7 +16,7 @@ namespace SharedClasses
 
         public static int Ratio(double value, double minimum, double maximum, double unit)
         {
-            return (int) Math.Floor((value - minimum) * unit / (maximum - minimum));
+            return (int)Math.Floor((value - minimum) * unit / (maximum - minimum));
         }
 
         public static string RepeatChar(char c, int count)

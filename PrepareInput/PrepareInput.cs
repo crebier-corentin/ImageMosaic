@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using ImageMagick;
 using Newtonsoft.Json;
 using SharedClasses;
-
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PrepareInput
 {
@@ -50,7 +46,7 @@ namespace PrepareInput
 
         private void CreateImageInfosAndResize()
         {
-            //Get file array 
+            //Get file array
             var files = ImageFinder.GetImages(_inputDir, _limit).ToArray();
 
             var total = files.Length;
@@ -61,7 +57,7 @@ namespace PrepareInput
             {
                 ResizeImage(file);
 
-                var imageInfo = new ImageInfo {FileName = file.Name, AverageColor = GetAverageColor(file)};
+                var imageInfo = new ImageInfo { FileName = file.Name, AverageColor = GetAverageColor(file) };
 
                 lock (_infoFile)
                 {
@@ -76,7 +72,7 @@ namespace PrepareInput
         {
             using (var magicImage = new MagickImage(fileInfo))
             {
-                var size = new MagickGeometry(_infoFile.Size, _infoFile.Size) {IgnoreAspectRatio = true};
+                var size = new MagickGeometry(_infoFile.Size, _infoFile.Size) { IgnoreAspectRatio = true };
 
                 magicImage.Resize(size);
 
@@ -93,9 +89,9 @@ namespace PrepareInput
                 var averageColor = new MagickColor();
 
                 //Get Average of Red Green And Blue
-                averageColor.R = (byte) pixels.Average(pixel => pixel.ToColor().R);
-                averageColor.G = (byte) pixels.Average(pixel => pixel.ToColor().G);
-                averageColor.B = (byte) pixels.Average(pixel => pixel.ToColor().B);
+                averageColor.R = (byte)pixels.Average(pixel => pixel.ToColor().R);
+                averageColor.G = (byte)pixels.Average(pixel => pixel.ToColor().G);
+                averageColor.B = (byte)pixels.Average(pixel => pixel.ToColor().B);
 
                 return averageColor;
             }

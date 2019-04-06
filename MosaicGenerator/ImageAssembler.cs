@@ -1,12 +1,9 @@
-using System;
+using ImageMagick;
+using SharedClasses;
 using System.Collections.Concurrent;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using ImageMagick;
-using SharedClasses;
-
 
 namespace MosaicGenerator
 {
@@ -58,7 +55,7 @@ namespace MosaicGenerator
             var outputHeight = _template.Height * pixelSize;
 
             using (var output = new MagickImage(new MagickColor("#FFFFFF"), outputWidth, outputHeight)
-                {Format = MagickFormat.Png})
+            { Format = MagickFormat.Png })
             {
                 using (var pixelCollection = _template.GetPixels())
                 {

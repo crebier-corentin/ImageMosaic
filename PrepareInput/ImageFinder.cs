@@ -1,9 +1,9 @@
+using ImageMagick;
+using SharedClasses;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ImageMagick;
-using SharedClasses;
 
 namespace PrepareInput
 {
@@ -58,7 +58,7 @@ namespace PrepareInput
 
         private static bool CanOpenImage(FileInfo file)
         {
-            var allowedExtensions = new[] {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg", ".tiff"};
+            var allowedExtensions = new[] { ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg", ".tiff" };
 
             if (!allowedExtensions.Contains(file.Extension.ToLower()))
             {
