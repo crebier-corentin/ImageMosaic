@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,8 +8,9 @@ namespace SharedClasses
 {
     internal static class ProgressBarManager
     {
-        private static readonly ConcurrentBag<ProgressBar> Bars = new ConcurrentBag<ProgressBar>();
         private static readonly CancellationTokenSource Source = new CancellationTokenSource();
+
+        public static event EventHandler TimerElapsed;
 
         static ProgressBarManager()
         {
@@ -24,31 +26,15 @@ namespace SharedClasses
                     {
                         await Task.Delay(100, cancellationToken);
 
-                        Print();
+                        RaiseTimerElapsed();
                     }
                 },
                 cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
 
-        internal static void Add(ProgressBar progressBar)
+        public static void RaiseTimerElapsed()
         {
-            Bars.Add(progressBar);
-        }
-
-        private static void Print()
-        {
-            foreach (var bar in Bars)
-            {
-                //Ignore if bar at 100%
-                if (bar.Done) continue;
-
-                bar.Print();
-
-                if (bar.Current == bar.Maximum)
-                {
-                    bar.Done = true;
-                }
-            }
+            TimerElapsed?.Invoke(typeof(ProgressBarManager), EventArgs.Empty);
         }
 
         public static void Stop()

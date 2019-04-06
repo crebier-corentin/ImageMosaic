@@ -1,22 +1,26 @@
 using System;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+
 
 namespace SharedClasses
 {
     public class ProgressBar
     {
-        private const int BarLenght = 20;
+        private static object _consoleLock = new object();
+
+        private const int BarLenght = 30;
 
         private string _label;
         private int _maximum;
         private int _current;
-        private bool _noPercentage;
+        private readonly bool _noPercentage;
 
         private readonly int _originalTop;
         private int _lastPrintLength;
 
-        internal bool Done;
+        public bool Done;
 
         public string Label => _label;
         public int Current => _current;
@@ -40,14 +44,24 @@ namespace SharedClasses
             //Move cursor to the next line
             Console.WriteLine();
 
-            ProgressBarManager.Add(this);
+            //PrintTimer
+            ProgressBarManager.TimerElapsed += ProgressBarManagerOnTimerElapsed;
         }
+
 
         public void Tick()
         {
             if (Done) return;
 
             Interlocked.Increment(ref _current);
+
+            //Done
+            if (_current == _maximum)
+            {
+                Done = true;
+                ProgressBarManager.TimerElapsed -= ProgressBarManagerOnTimerElapsed;
+                PrintAsync();
+            }
         }
 
         public void Tick(string label)
@@ -88,22 +102,35 @@ namespace SharedClasses
 
         public void Print()
         {
-            //Remember console cursor position
-            var consoleTop = Console.CursorTop;
-            var consoleLeft = Console.CursorLeft;
+            lock (_consoleLock)
+            {
+                //Remember console cursor position
+                var consoleTop = Console.CursorTop;
+                var consoleLeft = Console.CursorLeft;
 
-            //Clear line and print new progress
-            Console.SetCursorPosition(0, _originalTop);
+                //Clear line and print new progress
+                Console.SetCursorPosition(0, _originalTop);
 
-            var progressOutput = ToString();
+                var progressOutput = ToString();
 
-            //Pad right with space to clear previous progress
-            Console.Write(progressOutput.PadRight(_lastPrintLength));
+                //Pad right with space to clear previous progress
+                Console.Write(progressOutput.PadRight(_lastPrintLength));
 
-            _lastPrintLength = progressOutput.Length;
+                _lastPrintLength = progressOutput.Length;
 
-            //Restore console cursor position
-            Console.SetCursorPosition(consoleLeft, consoleTop);
+                //Restore console cursor position
+                Console.SetCursorPosition(consoleLeft, consoleTop);
+            }
+        }
+
+        public async Task PrintAsync()
+        {
+            await Task.Run(() => { Print(); });
+        }
+
+        private void ProgressBarManagerOnTimerElapsed(object sender, EventArgs e)
+        {
+            Print();
         }
     }
 }
