@@ -14,6 +14,9 @@ namespace PrepareInput
             HelpText = "Maximum number of images taken from input directory (0 for no limit)")]
         public int Limit { get; set; }
 
+        [Option('r', "recursive", HelpText = "Search for images in subdirectories")]
+        public bool RecursiveSearch { get; set; }
+
         [Option('o', "output", Required = true, HelpText = "Output filename")]
         public string OutputPath { get; set; }
     }

@@ -26,7 +26,8 @@ namespace PrepareInput
                     {
                         var inputDir = new DirectoryInfo(options.InputDirectoryPath);
 
-                        PrepareInput.CreateInputArchive(inputDir, options.OutputPath, options.Size, options.Limit);
+                        PrepareInput.CreateInputArchive(inputDir, options.OutputPath, options.Size, options.Limit,
+                            options.RecursiveSearch);
 
                         Console.WriteLine($"Done output file : {options.OutputPath}");
                     }

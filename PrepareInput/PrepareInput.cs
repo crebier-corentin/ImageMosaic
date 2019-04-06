@@ -13,18 +13,21 @@ namespace PrepareInput
         private readonly DirectoryInfo _inputDir;
         private TmpDir _outputDir;
         private readonly int _limit;
+        private readonly bool _recursiveSearch;
 
-        public static void CreateInputArchive(DirectoryInfo dir, string archiveName, int size = 20, int limit = 5000)
+        public static void CreateInputArchive(DirectoryInfo dir, string archiveName, int size = 20, int limit = 5000,
+            bool recursiveSearch = true)
         {
-            var prepareInput = new PrepareInput(dir, size, limit);
+            var prepareInput = new PrepareInput(dir, size, limit, recursiveSearch);
             prepareInput.CreateInputArchive(archiveName);
         }
 
-        public PrepareInput(DirectoryInfo dir, int size = 20, int limit = 5000)
+        public PrepareInput(DirectoryInfo dir, int size = 20, int limit = 5000, bool recursiveSearch = true)
         {
             _inputDir = dir;
             _infoFile.Size = size;
             _limit = limit;
+            _recursiveSearch = recursiveSearch;
         }
 
         private void CreateInputArchive(string archiveName)
@@ -47,7 +50,7 @@ namespace PrepareInput
         private void CreateImageInfosAndResize()
         {
             //Get file array
-            var files = ImageFinder.GetImages(_inputDir, _limit).ToArray();
+            var files = ImageFinder.GetImages(_inputDir, _recursiveSearch, _limit).ToArray();
 
             var total = files.Length;
 
@@ -57,7 +60,7 @@ namespace PrepareInput
             {
                 ResizeImage(file);
 
-                var imageInfo = new ImageInfo { FileName = file.Name, AverageColor = GetAverageColor(file) };
+                var imageInfo = new ImageInfo {FileName = file.Name, AverageColor = GetAverageColor(file)};
 
                 lock (_infoFile)
                 {
@@ -72,7 +75,7 @@ namespace PrepareInput
         {
             using (var magicImage = new MagickImage(fileInfo))
             {
-                var size = new MagickGeometry(_infoFile.Size, _infoFile.Size) { IgnoreAspectRatio = true };
+                var size = new MagickGeometry(_infoFile.Size, _infoFile.Size) {IgnoreAspectRatio = true};
 
                 magicImage.Resize(size);
 
@@ -89,9 +92,9 @@ namespace PrepareInput
                 var averageColor = new MagickColor();
 
                 //Get Average of Red Green And Blue
-                averageColor.R = (byte)pixels.Average(pixel => pixel.ToColor().R);
-                averageColor.G = (byte)pixels.Average(pixel => pixel.ToColor().G);
-                averageColor.B = (byte)pixels.Average(pixel => pixel.ToColor().B);
+                averageColor.R = (byte) pixels.Average(pixel => pixel.ToColor().R);
+                averageColor.G = (byte) pixels.Average(pixel => pixel.ToColor().G);
+                averageColor.B = (byte) pixels.Average(pixel => pixel.ToColor().B);
 
                 return averageColor;
             }

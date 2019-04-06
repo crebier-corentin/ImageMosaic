@@ -11,27 +11,38 @@ namespace PrepareInput
     {
         private static ProgressBar _bar = null;
 
-        public class Count
+        private static IEnumerable<FileInfo> GetFiles(DirectoryInfo rootDir, bool recursiveSearch)
         {
-            public int Value;
+            foreach (var file in rootDir.EnumerateFiles())
+            {
+                yield return file;
+            }
+
+            //Recursive Search
+            if (!recursiveSearch) yield break;
+
+            foreach (var dir in rootDir.GetDirectories())
+            {
+                foreach (var image in GetFiles(dir, true))
+                {
+                    yield return image;
+                }
+            }
         }
 
-        public static IEnumerable<FileInfo> GetImages(DirectoryInfo rootDir, int limit, Count count = null)
+        public static IEnumerable<FileInfo> GetImages(DirectoryInfo rootDir, bool recursiveSearch, int limit)
         {
-            if (count == null)
-            {
-                count = new Count();
-            }
+            var count = 0;
 
             if (_bar == null)
             {
                 _bar = new ProgressBar(limit);
             }
 
-            foreach (var file in rootDir.EnumerateFiles())
+            foreach (var file in GetFiles(rootDir, recursiveSearch))
             {
                 //Limit
-                if (limit > 0 && count.Value >= limit)
+                if (limit > 0 && count >= limit)
                 {
                     yield break;
                 }
@@ -39,26 +50,18 @@ namespace PrepareInput
                 //Image
                 if (CanOpenImage(file))
                 {
-                    _bar.Tick($"Finding image : {file.Name}");
+                    _bar.Tick($"Searching image : {file.Name}");
 
-                    count.Value++;
+                    count++;
 
                     yield return file;
-                }
-            }
-
-            foreach (var dir in rootDir.GetDirectories())
-            {
-                foreach (var image in GetImages(dir, limit, count))
-                {
-                    yield return image;
                 }
             }
         }
 
         private static bool CanOpenImage(FileInfo file)
         {
-            var allowedExtensions = new[] { ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg", ".tiff" };
+            var allowedExtensions = new[] {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg", ".tiff"};
 
             if (!allowedExtensions.Contains(file.Extension.ToLower()))
             {

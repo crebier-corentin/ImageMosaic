@@ -12,6 +12,7 @@ Un générateur d'image mosaïque
 ```
 -l Limite le nombres d'image prise dans le dossier
 -s Taille des images après redimensionnement (20 recommandé) 
+-r Recherche les images dans les sous-dossiers
 -o Fichier de sortie
 ```
 ##### Exemple :
