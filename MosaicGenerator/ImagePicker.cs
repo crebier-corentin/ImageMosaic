@@ -13,11 +13,32 @@ namespace MosaicGenerator
         private InputArchive _archive;
         private readonly bool _allowDuplicate;
 
-        public ImagePicker(InputArchive archive, bool allowDuplicate = true)
+        public ImagePicker(InputArchive archive, bool allowDuplicate, int total)
         {
             _archive = archive;
             _allowDuplicate = allowDuplicate;
             _imageInfos = new LinkedList<ImageInfo>(archive.GetImageInfos().ImageInfos);
+
+            if (_archive.GetImageInfos().Count < total)
+            {
+                //Get the minimum amount of duplications to surpass the total
+                var quotient = Math.DivRem(total, _archive.GetImageInfos().Count, out var reminder);
+                if (reminder > 0) quotient++;
+                Console.WriteLine($"Not enough images, duplicating the list {quotient} times.");
+                DuplicateImages(quotient);
+            }
+        }
+
+        private void DuplicateImages(int times)
+        {
+            IEnumerable<ImageInfo> tmpList = _imageInfos;
+            for (var i = 0; i < times; i++)
+            {
+                var clone = new LinkedList<ImageInfo>(_imageInfos);
+                tmpList = tmpList.Concat(clone);
+            }
+
+            _imageInfos = new LinkedList<ImageInfo>(tmpList);
         }
 
         public MagickImage MostFittingImage(MagickColor color)
@@ -27,16 +48,16 @@ namespace MosaicGenerator
 
         public string MostFittingImageFilename(MagickColor color)
         {
-            var image = _imageInfos.Where(i => i.Available).MinBy(i => ColorEuclideanDistance(i.AverageColor, color))
+            var node = _imageInfos.EnumerateNodes().MinBy(i => ColorEuclideanDistance(i.Value.AverageColor, color))
                 .First();
 
             //Duplicate
             if (!_allowDuplicate)
             {
-                image.Available = false;
+                _imageInfos.Remove(node);
             }
 
-            return image.FileName;
+            return node.Value.FileName;
         }
 
         private static double ColorEuclideanDistance(MagickColor color1, MagickColor color2)

@@ -19,20 +19,14 @@ namespace MosaicGenerator
                     }
 
                     using (new MagickTmpDir())
-                    using (var archive = InputArchive.FromFile(options.InputPath))
-                    using (var templateImage = new MagickImage(options.TemplatePath))
                     {
-                        ImageAssembler.AssembleImage(templateImage, archive, options.OutputPath);
+                        using var archive = InputArchive.FromFile(options.InputPath);
+                        using var templateImage = new MagickImage(options.TemplatePath);
+                        ImageAssembler.AssembleImage(templateImage, archive, options.OutputPath, options.Duplicates);
 
                         Console.WriteLine($"Done output file : {options.OutputPath}");
                     }
                 });
-
-            /*  using (var image = new MagickImage("aurora-borealis.png"))
-              {
-                  image.Resize(new Percentage(20));
-                  image.Write($"small-aurora-borealis.png");
-              }*/
         }
     }
 }

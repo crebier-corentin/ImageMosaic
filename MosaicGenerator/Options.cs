@@ -12,5 +12,8 @@ namespace MosaicGenerator
 
         [Option('o', "output", Required = true, HelpText = "Output filename")]
         public string OutputPath { get; set; }
+
+        [Option('d', "duplicates", HelpText = "Allow duplicates (if not enough images are available the input images will be multiplied)", Default = false)]
+        public bool Duplicates { get; set; }
     }
 }

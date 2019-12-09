@@ -3,11 +3,10 @@ using System.Collections.Generic;
 
 namespace SharedClasses
 {
-    public class ImageInfo
+    public struct ImageInfo
     {
         public string FileName;
         public MagickColor AverageColor;
-        public bool Available = true;
     }
 
     public class InfoFile
