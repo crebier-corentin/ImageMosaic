@@ -22,16 +22,15 @@ namespace MosaicGenerator
             if (_archive.GetImageInfos().Count < total)
             {
                 //Get the minimum amount of duplications to surpass the total
-                var quotient = Math.DivRem(total, _archive.GetImageInfos().Count, out var reminder);
-                if (reminder > 0) quotient++;
-                Console.WriteLine($"Not enough images, duplicating the list {quotient} times.");
-                DuplicateImages(quotient);
+                var dupAmount = Math.Ceiling(total / (double) _archive.GetImageInfos().Count);
+                Console.WriteLine($"Not enough images, duplicating the list {dupAmount} times.");
+                DuplicateImages((int) dupAmount);
             }
         }
 
         private void DuplicateImages(int times)
         {
-            IEnumerable<ImageInfo> tmpList = _imageInfos;
+            IEnumerable<ImageInfo> tmpList = new ImageInfo[0];
             for (var i = 0; i < times; i++)
             {
                 var clone = new LinkedList<ImageInfo>(_imageInfos);
